@@ -25,3 +25,8 @@ func processStdin(processor AoCProcessor) {
 		}
 	}
 }
+
+func generateSolution(processor AoCProcessor) {
+	processStdin(processor)
+	fmt.Println(processor.Compute())
+}
