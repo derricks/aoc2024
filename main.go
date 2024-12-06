@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	aoc2Sub1()
+	aoc2Sub2()
 }
 
 type AoCProcessor interface {
@@ -29,4 +29,18 @@ func processStdin(processor AoCProcessor) {
 func generateSolution(processor AoCProcessor) {
 	processStdin(processor)
 	fmt.Println(processor.Compute())
+}
+
+// utility function for removing an item from a slice
+// unlike slices.Delete, this doesn't simply 0 out the value
+// but actually makes a new slice with the item removed
+func deleteNthSliceItem[S ~[]E, E any](slice S, idxToDelete int) S {
+	newSlice := make(S, 0)
+	for idx, item := range slice {
+		if idx == idxToDelete {
+			continue
+		}
+		newSlice = append(newSlice, item)
+	}
+	return newSlice
 }
