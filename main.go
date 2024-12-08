@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	aoc4sub1()
+	aoc4sub2()
 }
 
 type AoCProcessor interface {
