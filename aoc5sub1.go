@@ -10,9 +10,9 @@ import (
 var PAGE_ORDERING_REGEX = regexp.MustCompile("[0-9+]\\|[0-9+]")
 
 type AoC5Sub1Processor struct {
-	// records that a given page must come after the relevant pages
-	beforeRequirements map[string][]string
-	updates            []string
+	// maps values to what must come after them
+	afterRequirements map[string][]string
+	updates           []string
 }
 
 func (p *AoC5Sub1Processor) ProcessLine(line string) error {
@@ -25,10 +25,10 @@ func (p *AoC5Sub1Processor) ProcessLine(line string) error {
 	if PAGE_ORDERING_REGEX.MatchString(line) {
 		orderInstructions := strings.Split(line, "|")
 		before, after := orderInstructions[0], orderInstructions[1]
-		if _, found := p.beforeRequirements[before]; !found {
-			p.beforeRequirements[before] = []string{after}
+		if _, found := p.afterRequirements[before]; !found {
+			p.afterRequirements[before] = []string{after}
 		} else {
-			p.beforeRequirements[before] = append(p.beforeRequirements[before], after)
+			p.afterRequirements[before] = append(p.afterRequirements[before], after)
 		}
 	} else {
 		p.updates = append(p.updates, line)
@@ -66,7 +66,7 @@ func (p *AoC5Sub1Processor) isUpdateValid(pages []string) bool {
 	for _, page := range pages {
 		pageLoc := pageToLocation[page]
 
-		if afterPages, foundInstructions := p.beforeRequirements[page]; foundInstructions {
+		if afterPages, foundInstructions := p.afterRequirements[page]; foundInstructions {
 			for _, afterPage := range afterPages {
 				if afterLoc, foundAfterPage := pageToLocation[afterPage]; foundAfterPage && afterLoc < pageLoc {
 					// we found a page that needs to be after, but it's got a lower page number
